@@ -10,10 +10,17 @@ var routes = require('./routes/router');
 app.use('/', routes);
 
 // mongodb connection
-mongoose.connect("mongodb://localhost:27017/bookworm");
+mongoose.connect("mongodb://localhost:27017/trax");
 var db = mongoose.connection;
 // mongo error
 db.on('error', console.error.bind(console, 'connection error:'));
+
+//sessions that track logins
+app.use(session({
+  secret: 'treehouse loves you',
+  resave: true,
+  saveUninitialized: false
+}));
 
 // parse incoming requests
 app.use(bodyParser.json());
