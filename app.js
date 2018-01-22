@@ -5,22 +5,26 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-// link to routes
-var routes = require('./routes/router');
-app.use('/', routes);
-
 // mongodb connection
 mongoose.connect("mongodb://localhost:27017/trax");
 var db = mongoose.connection;
 // mongo error
 db.on('error', console.error.bind(console, 'connection error:'));
+// link to routes
+var routes = require('./routes/router');
+app.use('/', routes);
 
 //sessions that track logins
 app.use(session({
-  secret: 'treehouse loves you',
+  secret: 'trax rox',
   resave: true,
   saveUninitialized: false
 }));
+
+app.use(function (req, res, next) {
+  res.locals.currentUser = req.session.userId;
+  next();
+});
 
 // parse incoming requests
 app.use(bodyParser.json());
@@ -40,14 +44,14 @@ app.use(function(req, res, next) {
 // error handler
 // define as the last app.use callback
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.json('error', {
-    message: err.message,
-    error: {}
-  });
+  res.sendStatus(500);
+  // res.json('error', {
+  //   message: err.message,
+  //   error: {}
+  // });
 });
 
 // listen on port 3000
-app.listen(6060, function () {
-  console.log('Listening on port 6060');
+app.listen(7070, function () {
+  console.log('Now listening on port 7070');
 });
