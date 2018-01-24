@@ -1,28 +1,21 @@
 {
-  "name": "user-authentication",
+  "name": "treehouse-express-auth",
   "version": "1.0.0",
-  "description": "user authentication utilizing mongo",
-  "main": "app.js",
+  "description": "A project for learning how to add authentication to a web application.",
+  "author": "Treehouse Island, Inc.",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./app"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sbribrowne/User-Authentication.git"
-  },
-  "author": "Sade Browne",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sbribrowne/User-Authentication/issues"
-  },
-  "homepage": "https://github.com/sbribrowne/User-Authentication#readme",
   "dependencies": {
-    "bcrypt": "^1.0.3",
-    "body-parser": "^1.18.2",
-    "express": "^4.16.2",
-    "express-session": "^1.15.6",
-    "mongodb": "^3.0.1",
-    "mongoose": "^5.0.1",
-    "pug": "^2.0.0-rc.4"
-  }
+    "bcrypt": "^0.8.7",
+    "body-parser": "^1.13.3",
+    "express": "^4.13.4",
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.13.0",
+    "handlebars": "^4.0.11",
+    "mongoose": "^4.5.0",
+    "pug": "^2.0.0-beta2"
+  },
+  "license": "MIT"
 }
