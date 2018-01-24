@@ -4,7 +4,7 @@ var User = require('../models/user');
 
 // GET to rendor welcome page
 router.get('/welcome', function(req, res, next) {
-  if (! req.session.userId ) {
+  if (! req.session.userId  ) {
     var err = new Error("You are not authorized to view this page.");
     err.status = 403;
     return next(err);
@@ -14,7 +14,7 @@ router.get('/welcome', function(req, res, next) {
         if (error) {
           return next(error);
         } else {
-          return res.render('profile', { title: 'Profile', name: user.name});
+          return res.render('profile', { title: 'Profile' });
         }
       });
 });
@@ -40,10 +40,11 @@ router.get('/login', function(req, res, next) {
 
 // POST to send login information
 router.post('/login', function(req, res, next) {
-  if (req.body.email && req.body.password) {
-    User.authenticate(req.body.email, req.body.password, function (error, user) {
+  if (req.body.staffId && req.body.password) {
+    console.log(req.body.staffId)
+    User.authenticate(req.body.staffId, req.body.password, function (error, user) {
       if (error || !user) {
-        var err = new Error('Incorrect email or password');
+        var err = new Error('Incorrect ID or password');
         err.status = 401;
         return next(err);
       }  else {
@@ -52,7 +53,7 @@ router.post('/login', function(req, res, next) {
       }
     });
   } else {
-    var err = new Error('Email and password are required');
+    var err = new Error('ID and password are required');
     err.status = 401;
     return next(err);
   }
@@ -65,8 +66,8 @@ router.get('/adminconfig', function(req, res, next) {
 
 // POST to send information inputted for user functionality
 router.post('/adminconfig', function(req, res, next) {
-  if (req.body.email &&
-    req.body.name &&
+  if (req.body.staffId &&
+    req.body.securityRole &&
     req.body.password &&
     req.body.confirmPassword) {
 
@@ -79,8 +80,8 @@ router.post('/adminconfig', function(req, res, next) {
 
       // create object with form input
       var userData = {
-        email: req.body.email,
-        name: req.body.name,
+        staffId: req.body.staffId,
+        securityRole: req.body.securityRole,
         password: req.body.password
       };
 
@@ -95,7 +96,7 @@ router.post('/adminconfig', function(req, res, next) {
       });
 
     } else {
-      var err = new Error('Please enter username and password');
+      var err = new Error('Please enter ID and password');
       err.status = 400;
       return next(err);
     }

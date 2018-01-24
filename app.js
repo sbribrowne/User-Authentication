@@ -18,7 +18,7 @@ app.use(function (req, res, next) {
 });
 
 // mongodb connection
-mongoose.connect("mongodb://localhost:27017/trax");
+mongoose.connect("mongodb://localhost:27017");
 var db = mongoose.connection;
 // mongo error
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -62,6 +62,6 @@ app.use(function(err, req, res, next) {
 });
 
 // listen on port 3000
-app.listen(3000, function () {
-  console.log('Express app listening on port 3000');
+app.listen(5050, function () {
+  console.log('Express app listening on port 5050');
 });
