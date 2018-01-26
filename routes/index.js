@@ -1,9 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
+var staffUser = "";
 
-// GET to rendor welcome page
-router.get('/welcome', function(req, res, next) {
+
+async function userRole(input) {
+
+  const a = await User.findOne({ 'staffId' : input }, 'staffId securityRole')
+  return a.securityRole
+};
+
+
+// GET to rendor initiator welcome page
+router.get('/initiator', function(req, res, next) {
   if (! req.session.userId  ) {
     var err = new Error("You are not authorized to view this page.");
     err.status = 403;
@@ -14,7 +23,24 @@ router.get('/welcome', function(req, res, next) {
         if (error) {
           return next(error);
         } else {
-          return res.render('profile', { title: 'Profile' });
+          return res.render('initiator', { title: 'Initiator Profile' });
+        }
+      });
+});
+
+// GET to rendor admin welcome page
+router.get('/admin', function(req, res, next) {
+  if (! req.session.userId  ) {
+    var err = new Error("You are not authorized to view this page.");
+    err.status = 403;
+    return next(err);
+  }
+  User.findById(req.session.userId)
+      .exec(function (error, user) {
+        if (error) {
+          return next(error);
+        } else {
+          return res.render('admin', { title: 'Admin Profile' });
         }
       });
 });
@@ -41,15 +67,24 @@ router.get('/login', function(req, res, next) {
 // POST to send login information
 router.post('/login', function(req, res, next) {
   if (req.body.staffId && req.body.password) {
-    console.log(req.body.staffId)
-    User.authenticate(req.body.staffId, req.body.password, function (error, user) {
+    staffUser = req.body.staffId;
+    
+    User.authenticate(req.body.staffId, req.body.password, async function (error, user) {
       if (error || !user) {
         var err = new Error('Incorrect ID or password');
         err.status = 401;
         return next(err);
       }  else {
         req.session.userId = user._id;
-        return res.redirect('/welcome');
+
+        const a = await userRole(staffUser)
+        console.log(a);
+
+        if (a === 'initiator') {
+          return res.redirect('/initiator');
+        } else {
+          return res.redirect('/admin');
+        }       
       }
     });
   } else {
